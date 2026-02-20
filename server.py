@@ -3,8 +3,8 @@ import struct
 import os
 
 class LogManager:
-    def __init__(self , log_file="server.log"):
-        self.log_file = log_file
+    def __init__(self , filename="server.log"):
+        self.filename = filename
         self.file = open(self.filename, "ab", buffering=0)
     def write(self , message):
         current_offset = self.file.tell()
