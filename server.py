@@ -49,6 +49,16 @@ async def handle_client(reader , writer):
             elif command ==2:
                 if len(payload)!=8 :
                     res = b"ER_BAD_PAYLOAD"
+                else:
+                    requested_offset = struct.unpack("!Q", payload)[0]
+                    print(f"[{address}] FETCH FROM OFFSET: {requested_offset}")
+                    result = await loop.run_in_executor(None, log_manager.read_message, requested_offset)
+                    
+                    if result:
+                        msg_data, next_offset = result
+                        res = b"OK" + struct.pack("!Q", next_offset) + msg_data
+                    else:
+                        res= b"NF"
             else:
                 print(f"UNKNOWN COMMAND: {command}")
                 res = b"ER"
